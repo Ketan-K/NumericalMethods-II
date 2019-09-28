@@ -8,6 +8,7 @@ public:
 	int **cost;
 	int *supply, *tsupply;
 	int *demands, *tdemands;
+	
 	int **Allocations;
 	TP();
 	void init(int, int);
@@ -25,7 +26,8 @@ public:
 	int **NWCM();
 
 	int **LCM();
-
+	void calRowPenalty();
+	int **VAM();
 	int findMinCostCell(int *, int *);
 
 	int MatrixMinimaMethod();

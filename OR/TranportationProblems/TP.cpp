@@ -91,9 +91,8 @@ void dispMatrix(int **mat, int row, int cols)
 }
 bool TP::checkBalance()
 {
-	if (total(supply, NOS) == total(demands, NOD))
-		return true;
-	return false;
+	return (total(supply, NOS) == total(demands, NOD))
+	
 }
 
 void TP::makeTempSD()
@@ -196,20 +195,28 @@ int **TP::LCM()
 	makeTempSD();
 	int minI, minJ;
 
-	cout << "Check 0 : " << checkTotalSupplyAndDemandsAreSatisfied();
+	//cout << "Check 0 : " << checkTotalSupplyAndDemandsAreSatisfied();
 
-	//while (!checkTotalSupplyAndDemandsAreSatisfied())
-	for (int t = 0; t < 5; t++)
+	while (!checkTotalSupplyAndDemandsAreSatisfied())
+	//for (int t = 0; t < 5; t++)
 	{
-		int temp = findMinCostCell(&minI, &minJ);
-		cout << "\nMINi : " << minI;
-		cout << "\nMINj : " << minJ;
-		allocate(minI, minJ, temp);
-		dispMatrix(Allocations, NOS, NOD);
+		findMinCostCell(&minI, &minJ);
+		//cout << "\nMINi : " << minI;
+		//cout << "\nMINj : " << minJ;
+		if (tsupply[minI] < tdemands[minJ])
+		{
+			allocate(minI, minJ, tsupply[minI]);
+		}
+		else
+		{
+			allocate(minI, minJ, tdemands[minJ]);
+		}
+		
+		//dispMatrix(Allocations, NOS, NOD);
 	}
 	cout << "Check 1 : " << checkTotalSupplyAndDemandsAreSatisfied();
 
-	if (checkTotalSupplyAndDemandsAreSatisfied())
+	if (this->checkTotalSupplyAndDemandsAreSatisfied())
 	{
 		cout << "\nAll Demands and Supply are Satisfied Using Least Cost Method.";
 		cout << "\n Allocations Matrix :: " << endl;
@@ -217,7 +224,7 @@ int **TP::LCM()
 			for (int j = 0; j < NOD; j++)
 				cout << "\t" << Allocations[i][j];
 		cout << "\nTotal Transporatation Cost is :: " << calCost() << endl;
-		cout << "Check : " << checkTotalSupplyAndDemandsAreSatisfied();
+		cout << "Check : " << this->checkTotalSupplyAndDemandsAreSatisfied();
 
 		return Allocations;
 	}
@@ -232,4 +239,30 @@ int TP::calCost()
 			if (Allocations[i][j] > 0)
 				tcost += Allocations[i][j] * cost[i][j];
 	return tcost;
+}
+
+void TP::calRowPenalty(int *rowPenaty)
+{
+	
+}
+
+int **TP::VAM()
+{
+	if (!this->checkBalance())
+	{
+		cerr << "Unbalanced Transportation problem !";
+		return Allocations;
+	}
+
+	makeTempSD();
+	int *rowPenalty,*colPenalty;
+	rowPenalty=new int[NOS];
+	colPenalty=new int[NOD];
+	calRowPenalty(rowPenalty);
+	calColPenalty(colPenalty);
+	while (!checkTotalSupplyAndDemandsAreSatisfied())
+	{
+
+	}
+
 }
