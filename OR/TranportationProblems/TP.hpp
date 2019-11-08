@@ -18,7 +18,6 @@ public:
 
 	void makeTempSD();
 
-	int total(int *, int);
 	bool checkTotalSupplyAndDemandsAreSatisfied();
 	bool checkBalance();
 	void allocate(int i, int j, int c);
@@ -26,12 +25,13 @@ public:
 	int **NWCM();
 
 	int **LCM();
-	void calRowPenalty();
-	int **VAM();
+	//void calRowPenalty();
+	//int **VAM();
 	int findMinCostCell(int *, int *);
 
 	int MatrixMinimaMethod();
 	int checkOptimize();
 };
 
+int total(int *, int);
 void dispMatrix(int **, int, int);

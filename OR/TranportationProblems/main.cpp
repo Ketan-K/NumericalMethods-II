@@ -15,6 +15,7 @@ int main(int argc, char *argv[])
 
 	problem1.display();
 	int **mat = problem1.LCM();
+	//problem1.NWCM();
 	//  dispMatrix(mat,problem1.NOS,problem1.NOD);
 	return 0;
 }

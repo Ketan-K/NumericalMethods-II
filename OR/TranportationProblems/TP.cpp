@@ -91,7 +91,7 @@ void dispMatrix(int **mat, int row, int cols)
 }
 bool TP::checkBalance()
 {
-	return (total(supply, NOS) == total(demands, NOD))
+	return (total(supply, NOS) == total(demands, NOD));
 	
 }
 
@@ -103,7 +103,7 @@ void TP::makeTempSD()
 		tdemands[i] = demands[i];
 }
 
-int TP::total(int *array, int N)
+int total(int *array, int N)
 {
 	int sum = 0;
 	for (int i = 0; i < N; i++)
@@ -116,8 +116,10 @@ bool TP::checkTotalSupplyAndDemandsAreSatisfied()
 	return (total(tsupply, NOS) == 0 && total(tdemands, NOD) == 0);
 }
 
-void TP::allocate(int i, int j, int c)
+void TP::allocate(int i, int j, int c=-1)
 {
+	if(c==-1)
+		c=tsupply[i] < tdemands[j] ? tsupply[i] :tdemands[j];
 	Allocations[i][j] = c;
 	tdemands[j] -= c;
 	tsupply[i] -= c;
@@ -203,6 +205,8 @@ int **TP::LCM()
 		findMinCostCell(&minI, &minJ);
 		//cout << "\nMINi : " << minI;
 		//cout << "\nMINj : " << minJ;
+		allocate(minI, minJ);
+		/*
 		if (tsupply[minI] < tdemands[minJ])
 		{
 			allocate(minI, minJ, tsupply[minI]);
@@ -211,7 +215,7 @@ int **TP::LCM()
 		{
 			allocate(minI, minJ, tdemands[minJ]);
 		}
-		
+		*/
 		//dispMatrix(Allocations, NOS, NOD);
 	}
 	cout << "Check 1 : " << checkTotalSupplyAndDemandsAreSatisfied();
@@ -240,11 +244,12 @@ int TP::calCost()
 				tcost += Allocations[i][j] * cost[i][j];
 	return tcost;
 }
-
-void TP::calRowPenalty(int *rowPenaty)
+/*
+int TP::calMaxRowPenalty(int *rowPenaty)
 {
 	
 }
+
 
 int **TP::VAM()
 {
@@ -255,14 +260,24 @@ int **TP::VAM()
 	}
 
 	makeTempSD();
-	int *rowPenalty,*colPenalty;
+	int *rowPenalty,*colPenalty,row,col,i,j;
 	rowPenalty=new int[NOS];
 	colPenalty=new int[NOD];
-	calRowPenalty(rowPenalty);
-	calColPenalty(colPenalty);
+	
 	while (!checkTotalSupplyAndDemandsAreSatisfied())
 	{
-
+		i=calMaxRowPenalty(rowPenalty);
+		j=calMaxColPenalty(colPenalty);
+		if(rowPenalty[i]>colPenalty[j])
+		{
+			col=findMinCostColofRow(i);
+			allocate(i,col);
+		}
+		else{
+			row=findMinCostRowofCol(j);
+			allocate(row,j);
+		}
 	}
 
 }
+	*/
